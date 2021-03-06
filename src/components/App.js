@@ -1,7 +1,7 @@
 //import DStorage from '../abis/DStorage.json'
 import React, { Component } from 'react';
-import Navbar from './Navbar'
-import Main from './Main'
+import Navbar from './Navbar';
+import Main from './Main';
 import Web3 from 'web3';
 import './App.css';
 
@@ -11,29 +11,28 @@ class App extends Component {
 
   async componentWillMount() {
     await this.loadWeb3()
-    await this.loadBlockchainData()
+    await this.loadBlockchainData();
   }
 
   async loadWeb3() {
-    //Setting up Web3
+    if(window.ethereum) {
+      window.web3 = new Web3(window.web3.ethereum);
+      await window.ethereum.enable();
+    }
+
+    else if(window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+    }
+
+    else {
+      window.alert('Non-Ethereum browser detected. Please install Metamask extension');
+    }
   }
 
   async loadBlockchainData() {
-    //Declare Web3
+    const web3 = window.web3;
 
-    //Load account
-
-    //Network ID
-
-    //IF got connection, get data from contracts
-      //Assign contract
-
-      //Get files amount
-
-      //Load files&sort by the newest
-
-    //Else
-      //alert Error
+    console.log(web3);
 
   }
 
