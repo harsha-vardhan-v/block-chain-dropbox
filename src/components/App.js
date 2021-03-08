@@ -16,7 +16,7 @@ class App extends Component {
 
   async loadWeb3() {
     if(window.ethereum) {
-      window.web3 = new Web3(window.web3.ethereum);
+      window.web3 = new Web3(window.ethereum);
       await window.ethereum.enable();
     }
 
@@ -30,9 +30,20 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
+    
+    // if (window.ethereum) {
+    //   web3 = new Web3(window.ethereum);
+    //   await window.ethereum.enable();
+    // } else if (window.web3) {
+    //   web3 = new Web3(window.web3.currentProvider);
+    // } else {
+    //   window.alert('Non-Ethereum browser detected. Please install MetaMask plugin');
+    // };
+
     const web3 = window.web3;
 
-    console.log(web3);
+    const accounts = await web3.eth.getAccounts();
+    this.setState({account: accounts[0]});
 
   }
 
@@ -61,6 +72,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      account: ''
     }
 
     //Bind functions
