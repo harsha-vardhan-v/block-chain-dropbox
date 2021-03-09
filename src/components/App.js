@@ -44,7 +44,7 @@ class App extends Component {
 
     const accounts = await web3.eth.getAccounts();
     this.setState({account: accounts[0]});
-
+    this.setState({loading: false});
   }
 
   // Get file from user
@@ -72,7 +72,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      account: ''
+      account: '',
+      loading: true
     }
 
     //Bind functions
