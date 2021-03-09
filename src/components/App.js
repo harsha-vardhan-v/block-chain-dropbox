@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
 import Main from './Main';
-import Web3 from 'web3';
 import './App.css';
+
+import Web3 from 'web3';
+import DStorage from '../abis/DStorage.json';
 
 //Declare IPFS
 
@@ -30,20 +32,32 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
-    
-    // if (window.ethereum) {
-    //   web3 = new Web3(window.ethereum);
-    //   await window.ethereum.enable();
-    // } else if (window.web3) {
-    //   web3 = new Web3(window.web3.currentProvider);
-    // } else {
-    //   window.alert('Non-Ethereum browser detected. Please install MetaMask plugin');
-    // };
 
     const web3 = window.web3;
 
+    //Load account
     const accounts = await web3.eth.getAccounts();
     this.setState({account: accounts[0]});
+
+    //Load network id
+    const networkId = await web3.eth.net.getId();
+    const networkData = DStorage.networks[networkId];
+
+    //Load the DStorage contract
+    if(networkData) {
+      //Load the contract
+      const dStorage = new web3.eth.Contract(DStorage.abi, networkData.address);
+      this.setState({ dStorage });
+
+      //load the file count variable
+      const fileCount = await dStorage.methods.fileCount().call();
+      console.log(fileCount);
+    }
+
+    else {
+      window.alert('DStorage smart contract has not been deployed in the detected network');
+    }
+
     this.setState({loading: false});
   }
 
@@ -73,7 +87,8 @@ class App extends Component {
     super(props)
     this.state = {
       account: '',
-      loading: true
+      loading: true,
+      dStorage: ''
     }
 
     //Bind functions
