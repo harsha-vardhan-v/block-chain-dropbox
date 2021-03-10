@@ -51,7 +51,16 @@ class App extends Component {
 
       //load the file count variable
       const fileCount = await dStorage.methods.fileCount().call();
-      console.log(fileCount);
+      this.setState({fileCount});
+
+      //Load all this files - newest first
+      for(let i = fileCount; i >= 1; i++){
+        const file = await dStorage.methods.files(i).call();
+
+        this.setState({
+          files: [...this.state.files, file]
+        })
+      }
     }
 
     else {
