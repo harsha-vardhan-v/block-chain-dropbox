@@ -61,7 +61,7 @@ class App extends Component {
 
         this.setState({
           files: [...this.state.files, file]
-        })
+        });
       }
     }
 
@@ -101,7 +101,35 @@ class App extends Component {
     //Add file to the IPFS
     ipfs.add(this.state.buffer, (error, result) => {
       console.log('IPFS result:', result);
+
+      if(error) {
+        console.log(error);
+        return;
+      }
+
+      this.setState({ loading: true });
+
+      //Assign file type for files without extension
+      if(this.state.type === ''){
+        this.setState({ type: 'none' });
+      }
+
+      //Save the file on blockchain
+      this.state.dStorage.methods.uploadFile(result[0].hash, result[0].size, this.state.type, this.state.name, description).send({ from: this.state.account}).on('transactionHash', (hash) => {
+        this.setState({
+          loading: false,
+          type: null,
+          name: null
+        });
+
+        window.location.reload();
+      }).on('error', (e) => {
+        window.alert('Error');
+        this.setState({loading: false});
+      });
+
     });
+    
       //Check If error
         //Return error
 
@@ -118,8 +146,11 @@ class App extends Component {
     super(props)
     this.state = {
       account: '',
-      loading: true,
-      dStorage: ''
+      loading: false,
+      dStorage: '',
+      type: null,
+      name: null,
+      files: []
     }
 
     //Bind functions
