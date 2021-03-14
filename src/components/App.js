@@ -96,8 +96,12 @@ class App extends Component {
   //Upload File
   uploadFile = description => {
 
-    //Add file to the IPFS
+    console.log('Submitting to IPFS ...');
 
+    //Add file to the IPFS
+    ipfs.add(this.state.buffer, (error, result) => {
+      console.log('IPFS result:', result);
+    });
       //Check If error
         //Return error
 
