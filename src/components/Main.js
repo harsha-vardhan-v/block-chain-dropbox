@@ -12,6 +12,29 @@ class Main extends Component {
             <div className="content">
               <p>&nbsp;</p>
               
+              <div className = "card mb-3 mx-auto bg-dark" style = {{ maxWidth: '512px' }}>
+                <h2 className = "text-white text-monospace bg-dark"><b><ins>Share Files</ins></b></h2>
+
+                <form onSubmit = {(event) => {
+                  event.preventDefault();
+                  const description = this.fileDescription.value;
+                  this.props.uploadFile(description);
+                }}>
+                  <div className = "form-group">
+                    <input
+                      id="fileDescription"
+                      type="text"
+                      ref={(input) => { this.fileDescription = input }}
+                      className="form-control text-monospace"
+                      placeholder="description ..."
+                      required></input>
+                  </div>
+
+                  <input type = "file" onChange = {this.props.captureFile} className = "text-white text-monospace"></input>
+                  <button type = "submit" className = "btn-primary btn-block"><b>Upload</b></button>                  
+                </form>
+              </div>
+
               <p>&nbsp;</p>
               {/* Create Table*/}
               <table className="table-sm table-bordered text-monospace" style={{ width: '1000px', maxHeight: '450px'}}>
